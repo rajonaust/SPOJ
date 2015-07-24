@@ -25,71 +25,30 @@ typedef unsigned long long ull ;
 /* int dx[] = {1,-1,0,0,1,1,-1,-1} , dy[] = {0,0,1,-1,1,-1,1,-1}; */ // 8 Direction
 /* int dx[] = {1,-1,1,-1,2,2,-2,-2} , dy[] = {2,2,-2,-2,1,-1,1,-1}; */ // Knight Direction
 /* int dx[] = {2,-2,1,1,-1,-1} , dy[] = {0,0,1,-1,1,-1}; */ // Hexagonal Direction
-int N , M , dt[100000+10] , ft[100000+10] , ct[100000+10] , cycle = 1 , ti = 1 , test = 0 ;
+int N , M , dt[100000+10] , ft[100000+10] , ct[100000+10] , outdegree[100000+10] , cycle = 1 , t = 1 ;
 bool visit[100000+10] ;
-vector <int> G[100000+10] , GT[100000+10] , C[100000+10] , CT[100000+10] , Q ;
+vector <int> G[100000+10] , GT[100000+10] , Q ;
 void dfs1(int u)
 {
     visit[u] = true ;
-    dt[u] = ti++ ;
+    dt[u] = t++ ;
     for(int i=0;i<G[u].size();i++)
     {
         int v = G[u][i] ;
         if(!visit[v]) dfs1(v);
     }
-    ft[u] = ti++ ;
+    ft[u] = t++ ;
     Q.pb(u);
 }
 void dfs2(int u,int cmp)
 {
     visit[u] = false ;
     ct[u] = cycle ;
-    //cout << u << ' ' << ct[u] << endl ;
     for(int i=0;i<GT[u].size();i++)
     {
         int v = GT[u][i] ;
         if(visit[v]&&cmp>ft[v]) dfs2(v,cmp);
     }
-}
-void dfsCycle(int u)
-{
-    visit[u] = true ;
-    for(int i=0;i<G[u].size();i++)
-    {
-        int v = G[u][i] ;
-        int x = ct[u] , y = ct[v] ;
-        if(x!=y)
-        {
-            C[x].pb(y) ;
-            CT[y].pb(x) ;
-        }
-        if(!visit[v]) dfsCycle(v);
-    }
-}
-int findLast(int u)
-{
-    if(CT[u].size()==0) return u ;
-    else return findLast(CT[u][0]) ;
-}
-int againfindLast(int u)
-{
-    if(C[u].size()==0) return u ;
-    else return againfindLast(C[u][0]) ;
-}
-void dfs(int u)
-{
-    visit[u] = true ;
-    for(int i=0;i<CT[u].size();i++)
-    {
-        int v = CT[u][i] ;
-        if(!visit[v]) dfs(v);
-    }
-}
-bool ok(int u)
-{
-    dfs(u);
-    for(int i=1;i<cycle;i++) if(visit[i]==false) return false ;
-    return true ;
 }
 int main()
 {
@@ -105,24 +64,28 @@ int main()
     }
     for(int i=1;i<=N;i++) if(!visit[i]) dfs1(i);
     for(int i=Q.size()-1;i>=0;i--) if(visit[Q[i]]) { dfs2(Q[i],ft[Q[i]]); cycle++; }
-    for(int i=1;i<=N;i++) if(!visit[i]) dfsCycle(i);
-    int t = findLast(1);
-    t = againfindLast(t);
-    memo(visit,false);
-    if(ok(t))
+    for(int u=1;u<=N;u++)
+    {
+        for(int i=0;i<G[u].size();i++)
+        {
+            int v = G[u][i] ;
+            if(ct[u]!=ct[v]) outdegree[ct[u]]++;
+        }
+    }
+    int count = 0 ;
+    for(int i=1;i<cycle;i++) if(outdegree[i]==0) count++;
+    if(count>1)puts("0");
+    else
     {
         vector <int> V ;
-        for(int i=1;i<=N;i++)
-        {
-            if(ct[i]==t) V.pb(i);
-        }
-        cout << V.size() << endl ;
+        for(int i=1;i<=N;i++) if(outdegree[ct[i]]==0) V.pb(i);
+        printf("%d\n",V.size());
         for(int i=0;i<V.size();i++)
         {
             if(i!=0) printf(" ");
             printf("%d",V[i]);
         }
+        puts("");
     }
-    else puts("0");
     return 0;
 }
