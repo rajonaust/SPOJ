@@ -1,0 +1,64 @@
+/*
+    Author : RAJON BARDHAN
+    AUST CSE 27th Batch
+    All my programming success are dedicated to my mom , dad , little sister madhobi , teachers , friends and love TANIA SULTANA RIMY
+    ALGORITHM : Number Theory
+*/
+ 
+#include <bits/stdc++.h>
+using namespace std;
+ 
+#define pb push_back
+#define ff first
+#define ss second
+#define mp make_pair
+#define memo(a,b) memset(a,b,sizeof(a))
+#define INF 1e9
+#define EPS 1e-8
+#define PI 3.14159265358979323846
+ 
+typedef long long ll ;
+typedef unsigned long long ull ;
+ 
+/* int dx[] = {1,-1,0,0} , dy[] = {0,0,1,-1}; */ // 4 Direction
+/* int dx[] = {1,-1,0,0,1,1,-1,-1} , dy[] = {0,0,1,-1,1,-1,1,-1}; */ // 8 Direction
+/* int dx[] = {1,-1,1,-1,2,2,-2,-2} , dy[] = {2,2,-2,-2,1,-1,1,-1}; */ // Knight Direction
+/* int dx[] = {2,-2,1,1,-1,-1} , dy[] = {0,0,1,-1,1,-1}; */ // Hexagonal Direction
+int phi[1000000+10] ;
+ll S[1000000+10] ;
+void pre_calculation()
+{
+    phi[1] = 1 ;
+    for(int i=2;i<=1000000;i++)
+    {
+        if(phi[i]==0)
+        {
+            phi[i] = i-1 ;
+            for(int j=i+i;j<=1000000;j+=i)
+            {
+                if(phi[j]==0) phi[j] = j ;
+                phi[j] = phi[j] - phi[j]/i ;
+            }
+        }
+    }
+ 
+    for(int i=1;i<=1000000;i++)
+    {
+        for(int j=i+i;j<=1000000;j+=i)
+        {
+            S[j] = S[j] + (ll) (i*phi[j/i]);
+        }
+    }
+ 
+    for(int i=1;i<=1000000;i++) S[i] = S[i] + S[i-1] ;
+}
+int main()
+{
+    //freopen("input.txt","r",stdin);
+    //freopen("output.txt","w",stdout);
+    pre_calculation();
+    int n ;
+    while(scanf("%d",&n)==1&&n!=0) printf("%lld\n",S[n]);
+    return 0;
+}
+ 
