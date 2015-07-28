@@ -26,9 +26,11 @@ typedef unsigned long long ull ;
 /* int dx[] = {1,-1,0,0,1,1,-1,-1} , dy[] = {0,0,1,-1,1,-1,1,-1}; */ // 8 Direction
 /* int dx[] = {1,-1,1,-1,2,2,-2,-2} , dy[] = {2,2,-2,-2,1,-1,1,-1}; */ // Knight Direction
 /* int dx[] = {2,-2,1,1,-1,-1} , dy[] = {0,0,1,-1,1,-1}; */ // Hexagonal Direction
+
 int N , dt[1000+10] , ft[1000+10] , ct[1000+10] , indegree[1000+10] , t , cycle ;
 bool visit[1000+10] ;
 vector <int> G[1000+10] , GT[1000+10] , Q ;
+
 void dfs1(int u)
 {
     visit[u] = true ;
@@ -41,6 +43,7 @@ void dfs1(int u)
     ft[u] = ++t ;
     Q.pb(u);
 }
+
 void dfs2(int u,int cmp)
 {
     visit[u] = false ;
@@ -51,6 +54,7 @@ void dfs2(int u,int cmp)
         if(visit[v]&&cmp>ft[v]) dfs2(v,cmp);
     }
 }
+
 void Reset()
 {
     t = 0 ;
@@ -64,6 +68,7 @@ void Reset()
         indegree[i] = 0 ;
     }
 }
+
 int main()
 {
     //freopen("input.txt","r",stdin);
