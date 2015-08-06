@@ -1,0 +1,79 @@
+/*
+    Author : RAJON BARDHAN
+    AUST CSE 27th Batch
+    All my programming success are dedicated to my mom , dad , little sister madhobi , teachers , friends and love TANIA SULTANA RIMY
+
+    Problem Name : INCDSEQ - Distinct Increasing Subsequences ( SPOJ )
+    ALGORITHM : BIT + Dynamic Programming
+*/
+
+#include <bits/stdc++.h>
+using namespace std;
+
+#define pb push_back
+#define ff first
+#define ss second
+#define mp make_pair
+#define memo(a,b) memset(a,b,sizeof(a))
+#define INF 1e9
+#define EPS 1e-8
+#define PI 3.14159265358979323846
+
+typedef long long ll ;
+typedef unsigned long long ull ;
+
+/* int dx[] = {1,-1,0,0} , dy[] = {0,0,1,-1}; */ // 4 Direction
+/* int dx[] = {1,-1,0,0,1,1,-1,-1} , dy[] = {0,0,1,-1,1,-1,1,-1}; */ // 8 Direction
+/* int dx[] = {1,-1,1,-1,2,2,-2,-2} , dy[] = {2,2,-2,-2,1,-1,1,-1}; */ // Knight Direction
+/* int dx[] = {2,-2,1,1,-1,-1} , dy[] = {0,0,1,-1,1,-1}; */ // Hexagonal Direction
+
+ll mod = 5000000 , last[50+10][10000+10] , tree[50+10][10000+10] ;
+int N , K, A[10000+10], B[10000+10] , ans = 0 , key = 0  ;
+map <int,int> order ;
+
+void update(int idx,int j,ll v)
+{
+    for(;idx<=10000;idx+=(idx&-idx)) tree[j][idx] = ( tree[j][idx] + v ) % mod ;
+}
+
+ll query(int idx,int j)
+{
+    ll sum = 0 ;
+    for(;idx>0;idx-=(idx&-idx)) sum = ( sum + tree[j][idx] ) % mod ;
+    return sum ;
+}
+
+int main()
+{
+    //freopen("input.txt","r",stdin);
+    //freopen("output.txt","w",stdout);
+    scanf("%d%d",&N,&K);
+    for(int i=1;i<=N;i++)
+    {
+        scanf("%d",&A[i]);
+        B[i] = A[i] ;
+    }
+
+    sort(&B[1],&B[N+1]);
+    for(int i=1;i<=N;i++) if(order[B[i]]==0) order[B[i]]=++key ;
+    for(int i=1;i<=N;i++) A[i] = order[A[i]] ;
+
+    for(int i=1;i<=N;i++)
+    {
+        for(int j=1;j<=K;j++)
+        {
+            ll p = j==1 ? 1 : query(A[i]-1,j-1);
+
+            p = p - last[j][A[i]] ;
+            p = ( p + mod ) % mod ;
+            update(A[i],j,p);
+
+            if(j==K) ans=(ans+p)%mod;
+            last[j][A[i]] = ( last[j][A[i]] + p ) % mod  ;
+        }
+    }
+
+    cout << ans << endl ;
+
+    return 0;
+}
