@@ -47,6 +47,7 @@ void sieve()
         }
     }
 }
+
 int main()
 {
     //freopen("input.txt","r",stdin);
