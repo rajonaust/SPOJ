@@ -1,0 +1,107 @@
+/*
+    Author : RAJON BARDHAN
+    AUST CSE 27th Batch
+    All my programming success are dedicated to my mom , dad , little sister madhobi , teachers , friends and love TANIA SULTANA RIMY
+
+    Problem Name : PLD - Palindromes
+    ALGORITHM : String Processing
+*/
+
+#include <bits/stdc++.h>
+using namespace std;
+
+#define pb push_back
+#define ff first
+#define ss second
+#define mp make_pair
+#define memo(a,b) memset(a,b,sizeof(a))
+#define INF 1e9
+#define EPS 1e-8
+#define PI 3.14159265358979323846
+
+typedef long long ll ;
+typedef unsigned long long ull ;
+
+/* int dx[] = {1,-1,0,0} , dy[] = {0,0,1,-1}; */ // 4 Direction
+/* int dx[] = {1,-1,0,0,1,1,-1,-1} , dy[] = {0,0,1,-1,1,-1,1,-1}; */ // 8 Direction
+/* int dx[] = {1,-1,1,-1,2,2,-2,-2} , dy[] = {2,2,-2,-2,1,-1,1,-1}; */ // Knight Direction
+/* int dx[] = {2,-2,1,1,-1,-1} , dy[] = {0,0,1,-1,1,-1}; */ // Hexagonal Direction
+
+const ll M1 = 1000000007 , M2 = 10000019 , h1 = 999983 , h2 = 99991 ;
+int K , len ;
+char orginal[300000+10] , palin[300000+10] ;
+pair<ll,ll> org[300000+10] , pal[300000+10] ;
+
+void Hashing_for_orginal()
+{
+    ll d1 = 1 , d2 = 1 , T1 = 0 , T2 = 0 ;
+
+    for(int i=1;i<K;i++) d1 = ( d1*h1 )%M1 , d2 = ( d2*h2 )%M2 ;
+
+    for(int i=0;i<K;i++)
+    {
+        T1 = ( T1*h1+orginal[i] )%M1 ;
+        T2 = ( T2*h2+orginal[i] )%M2 ;
+    }
+
+    for(int i=0;i<=len-K;i++)
+    {
+        org[i] = mp(T1,T2);
+
+        T1 = ( ( T1 - d1*orginal[i] )*h1 + orginal[i+K] ) % M1 ;
+        T1 = ( T1+M1 )%M1 ;
+
+        T2 = ( ( T2 - d2*orginal[i] )*h2 + orginal[i+K] ) % M2 ;
+        T2 = ( T2+M2 )%M2 ;
+    }
+}
+
+void Hashing_for_palin()
+{
+    ll d1 = 1 , d2 = 1 , T1 = 0 , T2 = 0 ;
+
+    for(int i=1;i<K;i++) d1 = ( d1*h1 )%M1 , d2 = ( d2*h2 )%M2 ;
+
+    for(int i=0;i<K;i++)
+    {
+        T1 = ( T1*h1+palin[i] )%M1 ;
+        T2 = ( T2*h2+palin[i] )%M2 ;
+    }
+
+    for(int i=0;i<=len-K;i++)
+    {
+        pal[i] = mp(T1,T2);
+
+        T1 = ( ( T1 - d1*palin[i] )*h1 + palin[i+K] ) % M1 ;
+        T1 = ( T1+M1 )%M1 ;
+
+        T2 = ( ( T2 - d2*palin[i] )*h2 + palin[i+K] ) % M2 ;
+        T2 = ( T2+M2 )%M2 ;
+    }
+}
+
+int main()
+{
+    //freopen("input.txt","r",stdin);
+    //freopen("output.txt","w",stdout);
+    scanf("%d%s",&K,&orginal);
+
+    len = strlen(orginal);
+    strcpy(palin,orginal);
+    reverse(palin,palin+len);
+
+    Hashing_for_orginal();
+    Hashing_for_palin();
+
+    int ans = 0 ;
+
+    for(int i=0;i<=len-K;i++)
+    {
+        int j = i+K-1 ;
+        j = len-j-1;
+        if(org[i].ff==pal[j].ff&&org[i].ss==pal[j].ss) ans++;
+    }
+
+    printf("%d\n",ans);
+    return 0;
+}
