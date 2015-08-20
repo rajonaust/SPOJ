@@ -1,0 +1,86 @@
+/*
+    Author : RAJON BARDHAN
+    AUST CSE 27th Batch
+    All my programming success are dedicated to my mom , dad , little sister madhobi , teachers , friends and love TANIA SULTANA RIMY
+
+    Problem Name : ELCS - Easy Longest Common Substring ( SPOJ )
+    ALGORITHM : Rabin Karp
+*/
+
+#include <bits/stdc++.h>
+using namespace std;
+
+#define pb push_back
+#define ff first
+#define ss second
+#define mp make_pair
+#define memo(a,b) memset(a,b,sizeof(a))
+#define INF 1e9
+#define EPS 1e-8
+#define PI 3.14159265358979323846
+
+typedef long long ll ;
+typedef unsigned long long ull ;
+
+/* int dx[] = {1,-1,0,0} , dy[] = {0,0,1,-1}; */ // 4 Direction
+/* int dx[] = {1,-1,0,0,1,1,-1,-1} , dy[] = {0,0,1,-1,1,-1,1,-1}; */ // 8 Direction
+/* int dx[] = {1,-1,1,-1,2,2,-2,-2} , dy[] = {2,2,-2,-2,1,-1,1,-1}; */ // Knight Direction
+/* int dx[] = {2,-2,1,1,-1,-1} , dy[] = {0,0,1,-1,1,-1}; */ // Hexagonal Direction
+
+const ll M1 = 1000000007 , M2 = 10000019 , h1 = 999983 , h2 = 99991 ;
+int len[100000+10] ;
+char input[100000+10];
+vector < pair<ll,ll> > Hash[100000+10] ;
+
+int binarySearch(int a,int b)
+{
+    int ans = 0 ;
+    int lo = 0 , hi = min(len[a],len[b])-1 ;
+
+    while( lo<=hi )
+    {
+        int mid = (lo+hi)/2;
+
+        if(Hash[a][mid].ff==Hash[b][mid].ff)
+        {
+            ans = mid+1 ;
+            lo=mid+1;
+        }
+        else hi=mid-1;
+    }
+
+    return ans ;
+}
+int main()
+{
+    //freopen("input.txt","r",stdin);
+    //freopen("output.txt","w",stdout);
+    int N ;
+    scanf("%d",&N);
+    for(int i=0;i<N;i++)
+    {
+        scanf("%s",&input);
+        len[i] = strlen(input);
+
+        ll P1 = 0 , P2 = 0 ;
+
+        for(int j=0;j<len[i];j++)
+        {
+            P1 = (P1*h1+input[j])%M1 ;
+            P2 = (P2*h2+input[j])%M2 ;
+
+            Hash[i].pb({P1,P2}) ;
+        }
+    }
+
+    int Q ;
+    scanf("%d",&Q);
+
+    while( Q-- )
+    {
+        int a , b ;
+        scanf("%d%d",&a,&b);
+        printf("%d\n",binarySearch(a,b));
+    }
+    return 0;
+}
