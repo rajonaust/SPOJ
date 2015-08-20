@@ -51,6 +51,7 @@ int binarySearch(int a,int b)
 
     return ans ;
 }
+
 int main()
 {
     //freopen("input.txt","r",stdin);
