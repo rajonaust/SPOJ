@@ -1,0 +1,54 @@
+/*
+    Author : RAJON BARDHAN
+    AUST CSE 27th Batch
+    All my programming success are dedicated to my mom , dad , little sister madhobi , teachers , friends and love TANIA SULTANA RIMY
+
+    Problem Name : PRJAN15C - String Play
+    ALGORITHM : Simulation
+*/
+
+#include <bits/stdc++.h>
+using namespace std;
+
+#define pb push_back
+#define ff first
+#define ss second
+#define mp make_pair
+#define memo(a,b) memset(a,b,sizeof(a))
+#define INF 1e9
+#define EPS 1e-8
+#define PI 3.14159265358979323846
+
+typedef long long ll ;
+typedef unsigned long long ull ;
+
+/* int dx[] = {1,-1,0,0} , dy[] = {0,0,1,-1}; */ // 4 Direction
+/* int dx[] = {1,-1,0,0,1,1,-1,-1} , dy[] = {0,0,1,-1,1,-1,1,-1}; */ // 8 Direction
+/* int dx[] = {1,-1,1,-1,2,2,-2,-2} , dy[] = {2,2,-2,-2,1,-1,1,-1}; */ // Knight Direction
+/* int dx[] = {2,-2,1,1,-1,-1} , dy[] = {0,0,1,-1,1,-1}; */ // Hexagonal Direction
+
+char arr[10000000+10];
+ll f[28] ;
+
+int main()
+{
+    //freopen("input.txt","r",stdin);
+    //freopen("output.txt","w",stdout);
+    while( scanf("%s",&arr)==1 )
+    {
+        ll len = strlen(arr);
+        ll ans = len*len ;
+
+        memo(f,0);
+        for(int i=0;i<len;i++) f[arr[i]-'a']++;
+
+        for(int i=1;i<len;i++)
+        {
+            ll s = f[arr[i]-'a'] ;
+            if(arr[i]==arr[len-1]) s--;
+            ans-=s;
+        }
+        printf("%lld\n",ans);
+    }
+    return 0;
+}
