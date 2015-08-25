@@ -1,0 +1,66 @@
+/*
+    Author : RAJON BARDHAN
+    AUST CSE 27th Batch
+    All my programming success are dedicated to my mom , dad , little sister madhobi , teachers , friends and love TANIA SULTANA RIMY
+
+    Problem Name : TRAVERSE (Traverse through the board) ( SPOJ )
+    ALGORITHM : Dynamic Programming
+*/
+
+#include <stdio.h>
+#include <string>
+#include <string.h>
+#include <iostream>
+#include <stdlib.h>
+using namespace std;
+
+#define pb push_back
+#define ff first
+#define ss second
+#define mp make_pair
+#define memo(a,b) memset(a,b,sizeof(a))
+#define INF 1e9
+#define EPS 1e-8
+#define PI 3.14159265358979323846
+
+typedef long long ll ;
+typedef unsigned long long ull ;
+
+/* int dx[] = {1,-1,0,0} , dy[] = {0,0,1,-1}; */ // 4 Direction
+/* int dx[] = {1,-1,0,0,1,1,-1,-1} , dy[] = {0,0,1,-1,1,-1,1,-1}; */ // 8 Direction
+/* int dx[] = {1,-1,1,-1,2,2,-2,-2} , dy[] = {2,2,-2,-2,1,-1,1,-1}; */ // Knight Direction
+/* int dx[] = {2,-2,1,1,-1,-1} , dy[] = {0,0,1,-1,1,-1}; */ // Hexagonal Direction
+
+ll dp[5000+10][5000+10] ;
+char matrix[5001][5001];
+int n ;
+
+ll solve(int r,int c)
+{
+    if(r>n||c>n) return 0 ;
+    if(r==n&&c==n) return 1 ;
+
+    ll &ans = dp[r][c] ;
+
+    if(ans!=-1) return ans ;
+    ans = 0 ;
+
+    int x = matrix[r][c] - '0' ;
+
+    ans+=solve(r+x,c); ans+=solve(r,c+x);
+
+    return ans ;
+}
+
+int main()
+{
+    //freopen("input.txt","r",stdin);
+    //freopen("output.txt","w",stdout);
+    cin >> n ;
+    for(int i=1;i<=n;i++) for(int j=1;j<=n;j++) cin >> matrix[i][j] ;
+
+    memo(dp,-1);
+    cout << solve(1,1) ;
+
+    return 0;
+}
