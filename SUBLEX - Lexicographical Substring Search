@@ -1,0 +1,117 @@
+/*
+    Author : RAJON BARDHAN
+    AUST CSE 27th Batch
+    All my programming success are dedicated to my mom , dad , little sister madhobi , teachers , friends and love TANIA SULTANA RIMY
+
+    Problem Name : SUBLEX - Lexicographical Substring Search ( SPOJ )
+    ALGORITHM : String Processing
+*/
+
+#include <bits/stdc++.h>
+using namespace std;
+
+#define pb push_back
+#define ff first
+#define ss second
+#define mp make_pair
+#define memo(a,b) memset(a,b,sizeof(a))
+#define INF 1e9
+#define EPS 1e-8
+#define PI 3.14159265358979323846
+
+typedef long long ll ;
+typedef unsigned long long ull ;
+
+/* int dx[] = {1,-1,0,0} , dy[] = {0,0,1,-1}; */ // 4 Direction
+/* int dx[] = {1,-1,0,0,1,1,-1,-1} , dy[] = {0,0,1,-1,1,-1,1,-1}; */ // 8 Direction
+/* int dx[] = {1,-1,1,-1,2,2,-2,-2} , dy[] = {2,2,-2,-2,1,-1,1,-1}; */ // Knight Direction
+/* int dx[] = {2,-2,1,1,-1,-1} , dy[] = {0,0,1,-1,1,-1}; */ // Hexagonal Direction
+
+#define mx 100000
+char T[mx+10];
+int SA[mx+10] , R[mx+10] , L[mx+10] , H ;
+bool check[mx+10] ;
+
+bool cmp (int p,int q) { return R[p+H] < R[q+H] ;}
+
+void suffixSort()
+{
+    int N = strlen(T); H = 0 ;
+    for(int i=0;i<=N;i++) R[SA[i]=i] = T[i] ;
+    sort(SA,SA+N+1,cmp);
+
+    for(int i=0;i<=N;i++)
+    {
+        R[SA[i]] = i ;
+        L[i] = 1 ;
+        if(i>0&&T[SA[i]]==T[SA[i-1]])
+        {
+            L[i] = 0 ;
+            L[R[SA[i]] = R[SA[i-1]]]++;
+        }
+    }
+
+    for(H=1;H<N;H<<=1)
+    {
+        for(int a=0;a<=N;a+=L[a]) if(L[a]>1) sort(SA+a,SA+a+L[a],cmp);
+
+        for(int a=0,k;a<=N;a+=k)
+        {
+            for(k=1;k<L[a]&&R[SA[a]+H]==R[SA[a+k]+H];k++);
+            if(k<L[a]) L[a+k] = L[a] - k ;
+            L[a] = k ;
+        }
+
+        for(int a=0;a<=N;a+=L[a])
+        {
+            for(int k=0;k<L[a];k++)
+                R[SA[a+k]] = a ;
+        }
+    }
+}
+
+void getlcp()
+{
+    int N = strlen(T);
+    for(int i=0,c=0;i<N;i++)
+    {
+        if(c>0) c--;
+        int y = SA[R[i]-1] ;
+        while(i+c<N&&y+c<N&&T[i+c]==T[y+c]) c++ ;
+        L[R[i]] = c ;
+    }
+}
+
+int main()
+{
+    //freopen("input.txt","r",stdin);
+    //freopen("output.txt","w",stdout);
+    scanf("%s",&T);
+    suffixSort();
+    getlcp();
+
+    int Q , N = strlen(T) ;
+    scanf("%d",&Q);
+    while( Q-- )
+    {
+        int x ;
+        scanf("%d",&x);
+        for(int i=1;i<=N;i++)
+        {
+            int len = N - SA[i] ;
+            if(x<=len-L[i])
+            {
+                int t = 0 , j = 0 ;
+                while( x!=0 )
+                {
+                    if(t!=L[i]) t++;
+                    else x--;
+                    printf("%c",T[SA[i]+(j++)]);
+                }
+            }
+            else x-=(len-L[i]);
+        }
+        puts("");
+    }
+    return 0;
+}
