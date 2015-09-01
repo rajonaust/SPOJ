@@ -1,0 +1,76 @@
+/*
+    Author : RAJON BARDHAN
+    AUST CSE 27th Batch
+    All my programming success are dedicated to my mom , dad , little sister madhobi , teachers , friends and love TANIA SULTANA RIMY
+
+    Problem Name : FRACTION - Sort fractions
+    ALGORITHM : Number Theory
+*/
+
+#include <bits/stdc++.h>
+using namespace std;
+
+#define pb push_back
+#define ff first
+#define ss second
+#define mp make_pair
+#define memo(a,b) memset(a,b,sizeof(a))
+#define INF 1e9
+#define EPS 1e-8
+#define PI 3.14159265358979323846
+
+typedef long long ll ;
+typedef unsigned long long ull ;
+
+/* int dx[] = {1,-1,0,0} , dy[] = {0,0,1,-1}; */ // 4 Direction
+/* int dx[] = {1,-1,0,0,1,1,-1,-1} , dy[] = {0,0,1,-1,1,-1,1,-1}; */ // 8 Direction
+/* int dx[] = {1,-1,1,-1,2,2,-2,-2} , dy[] = {2,2,-2,-2,1,-1,1,-1}; */ // Knight Direction
+/* int dx[] = {2,-2,1,1,-1,-1} , dy[] = {0,0,1,-1,1,-1}; */ // Hexagonal Direction
+
+struct Node
+{
+    int x , y ;
+};
+
+vector < Node > V ;
+int N , M ;
+
+void build(int lx=0,int ly=1,int rx=1,int ry = 1)
+{
+    if(ly+ry>N||lx+rx>N) return ;
+
+    build(lx,ly,rx+lx,ry+ly);
+    V.pb({rx+lx,ry+ly});
+    build(lx+rx,ly+ry,rx,ry);
+}
+
+void Reset()
+{
+    V.clear();
+
+    V.pb({0,1});
+    build();
+    V.pb({1,1});
+}
+
+int main()
+{
+    //freopen("input.txt","r",stdin);
+    //freopen("output.txt","w",stdout);
+    int T ;
+    scanf("%d",&T);
+    while( T-- )
+    {
+        scanf("%d%d",&N,&M);
+
+        Reset();
+
+        while( M-- )
+        {
+            int i ;
+            scanf("%d",&i);
+            printf("%d/%d\n",V[i-1].x,V[i-1].y);
+        }
+    }
+    return 0;
+}
