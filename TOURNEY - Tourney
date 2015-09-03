@@ -1,0 +1,97 @@
+/*
+    Author : RAJON BARDHAN
+    AUST CSE 27th Batch
+    All my programming success are dedicated to my mom , dad , little sister madhobi , teachers , friends and love TANIA SULTANA RIMY
+
+    Problem Name : TOURNEY - Tourney ( SPOJ )
+    ALGORITHM : Data Structure
+*/
+
+#include <bits/stdc++.h>
+using namespace std;
+
+#define pb push_back
+#define ff first
+#define ss second
+#define mp make_pair
+#define memo(a,b) memset(a,b,sizeof(a))
+#define INF 1e9
+#define EPS 1e-8
+#define PI 3.14159265358979323846
+
+typedef long long ll ;
+typedef unsigned long long ull ;
+
+/* int dx[] = {1,-1,0,0} , dy[] = {0,0,1,-1}; */ // 4 Direction
+/* int dx[] = {1,-1,0,0,1,1,-1,-1} , dy[] = {0,0,1,-1,1,-1,1,-1}; */ // 8 Direction
+/* int dx[] = {1,-1,1,-1,2,2,-2,-2} , dy[] = {2,2,-2,-2,1,-1,1,-1}; */ // Knight Direction
+/* int dx[] = {2,-2,1,1,-1,-1} , dy[] = {0,0,1,-1,1,-1}; */ // Hexagonal Direction
+
+int arr[(1<<20)+10] , win[(1<<20)+10] , tree[3*(1<<20)+10];
+char c[5] ;
+
+void build(int node,int lo,int hi)
+{
+    if(lo==hi)
+    {
+        tree[node] = lo ;
+        win[lo] = 0 ;
+        return ;
+    }
+
+    int mid = (lo+hi)/2;
+    build(2*node,lo,mid);
+    build(2*node+1,mid+1,hi);
+
+    tree[node] = arr[tree[2*node]] > arr[tree[2*node+1]] ? tree[2*node] : tree[2*node+1] ;
+    win[tree[node]]++;
+}
+
+void update(int node,int lo,int hi,int x)
+{
+    if(lo>x||hi<x) return ;
+
+    if(lo==hi&&lo==x)
+    {
+        tree[node] = lo ;
+        return ;
+    }
+
+    int mid = (lo+hi)/2;
+    update(2*node,lo,mid,x);
+    update(2*node+1,mid+1,hi,x);
+    win[tree[node]]--;
+
+    tree[node] = arr[tree[2*node]] > arr[tree[2*node+1]] ? tree[2*node] : tree[2*node+1] ;
+    win[tree[node]]++;
+}
+
+int main()
+{
+    //freopen("input.txt","r",stdin);
+    //freopen("output.txt","w",stdout);
+    int N , M ;
+    scanf("%d%d",&N,&M);
+    for(int i=1;i<=(1<<N);i++) scanf("%d",&arr[i]);
+    build(1,1,1<<N);
+
+    while( M-- )
+    {
+        scanf("%s",&c);
+        if(c[0]=='W') printf("%d\n",tree[1]);
+        else if(c[0]=='S')
+        {
+            int d ;
+            scanf("%d",&d);
+            printf("%d\n",win[d]);
+        }
+        else
+        {
+            int i , s ;
+            scanf("%d%d",&i,&s);
+            arr[i] = s ;
+            update(1,1,1<<N,i);
+        }
+    }
+    return 0;
+}
