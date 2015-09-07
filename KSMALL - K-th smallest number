@@ -1,0 +1,50 @@
+/*
+    Author : RAJON BARDHAN
+    AUST CSE 27th Batch
+    All my programming success are dedicated to my mom , dad , little sister madhobi , teachers , friends and love TANIA SULTANA RIMY
+
+    Problem Name : KSMALL - K-th smallest number ( SPOJ )
+    ALGORITHM : Simulation
+*/
+
+#include <bits/stdc++.h>
+using namespace std;
+
+#define pb push_back
+#define ff first
+#define ss second
+#define mp make_pair
+#define memo(a,b) memset(a,b,sizeof(a))
+#define INF 1e9
+#define EPS 1e-8
+#define PI 3.14159265358979323846
+
+typedef long long ll ;
+typedef unsigned long long ull ;
+
+/* int dx[] = {1,-1,0,0} , dy[] = {0,0,1,-1}; */ // 4 Direction
+/* int dx[] = {1,-1,0,0,1,1,-1,-1} , dy[] = {0,0,1,-1,1,-1,1,-1}; */ // 8 Direction
+/* int dx[] = {1,-1,1,-1,2,2,-2,-2} , dy[] = {2,2,-2,-2,1,-1,1,-1}; */ // Knight Direction
+/* int dx[] = {2,-2,1,1,-1,-1} , dy[] = {0,0,1,-1,1,-1}; */ // Hexagonal Direction
+
+unsigned a , b , mod , k , A[5000000+10] ;
+
+int main()
+{
+    //freopen("input.txt","r",stdin);
+    //freopen("output.txt","w",stdout);
+    cin >> a >> b >> mod >> k ;
+
+    for( int i=0 ; i<5000000 ; i++ )
+	{
+		a = 31014 * (a & 65535) + (a >> 16);
+		b = 17508 * (b & 65535) + (b >> 16);
+		A[i] = ((a << 16) + b) % mod;
+	}
+
+	nth_element(&A[0],&A[k-1],&A[5000000]);
+
+	cout << A[k-1] << endl ;
+
+    return 0;
+}
