@@ -1,0 +1,83 @@
+/*
+    Author : RAJON BARDHAN
+    AUST CSE 27th Batch
+    All my programming success are dedicated to my mom , dad , little sister madhobi , teachers , friends and love TANIA SULTANA RIMY
+
+    Problem Name : DIVFACT - Divisors of factorial
+    ALGORITHM : Number Theory
+*/
+
+#include <bits/stdc++.h>
+using namespace std;
+
+#define pb push_back
+#define ff first
+#define ss second
+#define mp make_pair
+#define memo(a,b) memset(a,b,sizeof(a))
+#define INF 1e9
+#define EPS 1e-8
+#define PI 3.14159265358979323846
+
+typedef long long ll ;
+typedef unsigned long long ull ;
+
+/* int dx[] = {1,-1,0,0} , dy[] = {0,0,1,-1}; */ // 4 Direction
+/* int dx[] = {1,-1,0,0,1,1,-1,-1} , dy[] = {0,0,1,-1,1,-1,1,-1}; */ // 8 Direction
+/* int dx[] = {1,-1,1,-1,2,2,-2,-2} , dy[] = {2,2,-2,-2,1,-1,1,-1}; */ // Knight Direction
+/* int dx[] = {2,-2,1,1,-1,-1} , dy[] = {0,0,1,-1,1,-1}; */ // Hexagonal Direction
+
+ll arr[50000+10] , mod = 1000000000+7;
+char check[50000+10];
+vector < pair<int,int> > V[50000+10] ;
+
+void sieve()
+{
+    for(int i=2;i<=50000;i++)
+    {
+        if(check[i]==NULL)
+        {
+            for(int j=i;j<=50000;j+=i)
+            {
+                int t = j , cnt = 0 ;
+                while( t%i == 0 ) t/=i , cnt++ ;
+
+                V[j].pb(mp(i,cnt));
+                check[j] = '1' ;
+            }
+        }
+    }
+}
+int main()
+{
+    //freopen("input.txt","r",stdin);
+    //freopen("output.txt","w",stdout);
+    sieve();
+    int T ;
+    scanf("%d",&T);
+    while( T-- )
+    {
+        fill(arr,arr+50002,0);
+
+        int n ;
+        scanf("%d",&n);
+
+        if(n==0||n==1) puts("1");
+        else
+        {
+            for(int i=2;i<=n;i++)
+            {
+                for(int j=0;j<V[i].size();j++)
+                {
+                    arr[V[i][j].ff]+=V[i][j].ss;
+                }
+            }
+
+            ll ans = 1 ;
+            for(int i=1;i<=n;i++) ans = ( ans * (arr[i]+1) ) % mod ;
+
+            printf("%lld\n",ans);
+        }
+    }
+    return 0;
+}
